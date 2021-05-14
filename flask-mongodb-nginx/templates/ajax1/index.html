@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+    <h1>{% block title %} {{ title }} {% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h2>Simple request in XHR - TEXT LOAD IN DIV</h2>
+            <p> Code: 
+                <pre class="code">
+                    // Create Event Listener
+                    document.querySelector('#button').addEventListener('click', loadText);
+                    document.querySelector('#reset-btn').addEventListener('click', resetDiv);
+
+                    function loadText(){
+
+                        //Create XHR Object
+                        var xhr = new XMLHttpRequest();
+
+                        // Open function - type, url/file, async || open the static text file
+                        xhr.open('GET', '/static/ajax1/text/sampletext.txt',true);
+                        
+                        // OPTIONAL - used for loaders
+                        xhr.onprogress = function(){
+                            console.log('loading...');
+                        }
+
+                        // Onload property || response after send the request
+                        xhr.onload = function(){
+                            if (this.status == 200)
+                            {
+                                // saving responseText in text variable
+                                let text = this.responseText;
+
+                                // showing loaded text in console
+                                console.log('Text loaded: ');
+                                console.log(text);
+
+                                // loading in the text div in dom
+                                document.querySelector("#text").innerHTML = text;
+                            }
+                            else if (this.status == 404) {
+                                document.querySelector("#text").innerHTML = "File Not found";
+                            }
+                        }
+
+                        // handling errors
+                        xhr.onerror = function(){
+                            console.log('Sorry, thre is an error trying to send the request, please try again.');
+                        }
+
+                        // send request
+                        xhr.send();
+
+
+                    }
+                    function resetDiv(){
+                        document.querySelector("#text").innerHTML = "&lt;pre>**the text content of sampletext.txt file will appear here**&lt;/pre>";
+                    }
+                </pre>
+            </p>
+            <p>Test code: <br>
+                <button id="button">Get Text file</button> <i>//check the console to see process</i>
+                <br>
+                <div id="text" class="result"><pre>**the text content of sampletext.txt file will appear here**</pre></div>
+                <button id="reset-btn">Reset</button>
+            </p>
+            
+        </div>
+    </section>
+
+{% endblock %}
+{%block pageScripts %}
+    <!--script type="text/javascript" src="static/ajax1/js/main.js?v={{time}}"></script-->
+    <script type="text/javascript" src="{{ url_for('static', filename='ajax1/js/main.js', v=time) }}"></script>
+{% endblock %}

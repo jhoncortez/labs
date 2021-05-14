@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" src="{{ url_for('static', filename='style.css', v=time) }}" >
+    <title>{% block title %}{% endblock %} | Flaskr</title>
+    <style>
+        pre {
+            max-height: 400px !important; 
+            overflow-y: scroll !important;
+        }
+        pre.code {
+            background: rgb(19, 19, 19) !important; 
+            color: rgb(243, 243, 243) !important;
+        }
+        .result {
+            background: rgb(224, 224, 224) !important; 
+            color: rgb(0, 0, 0) !important;
+        }
+    </style>
+
+    {%block pageStyle %}{% endblock %}
+
+</head>
+<body>
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+{%block pageScripts %}{% endblock %}
+</body>
+</html>

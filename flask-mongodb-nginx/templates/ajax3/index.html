@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{%block pageStyle %}
+<style>
+    .user {
+        display:flex;
+        padding: 15px;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+    }
+    .user .user-info {
+        list-style: none ;
+        padding: 0px 20px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %} {{ title }} {% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h2>Use external API for load adata</h2>
+            <p> Code: 
+                <pre class="code">
+                    document.querySelector('#button1').addEventListener('click', loadGithubUers);
+                    document.querySelector('#reset-btn').addEventListener('click', resetDiv);
+
+                    // load github users
+                    function loadGithubUers(){
+
+                        const xhr = new XMLHttpRequest();
+
+                        xhr.open('GET', 'https://api.github.com/users', true);
+
+                        xhr.onprogress = () => console.log('loading gitub data..');
+
+                        xhr.onload = (event) => {
+                            const request = event.target;
+
+                            if (request.status == 200) 
+                            {
+                                console.log('Data loaded..');
+
+                                console.log('Parsing JSON Users Data..');
+                                let users = JSON.parse(request.responseText);
+
+                                console.log('Adding users data to div #users');
+
+                                let output = '';
+
+                                for (let user of users)
+                                {
+                                    output += `
+                                    &lt;div id="user-${user.id}" class="user">
+                                            &lt;img src="${user.avatar_url}" width="70" height="70">
+                                            &lt;ul class="user-info">
+                                                &lt;li>ID: ${user.id}&lt;/li>
+                                                &lt;li>UserLogin: &lt;a href="${user.html_url}" target="_blank">${user.login}&lt;/a>&lt;/li>
+                                                &lt;li>&lt;a href="${user.followers_url}" target="_blank">Followers&lt;/a>&lt;/li>
+                                            &lt;/ul>
+                                        &lt;/div>
+                                    `
+                                }
+                                document.querySelector('#users').innerHTML = output;
+                            }
+                            else if (request.status == 404)
+                            {
+                                console.log('File Not Found');
+                            }
+                        }
+
+                        xhr.send();
+                    }
+
+                    function resetDiv(){
+                        document.querySelector("#users").innerHTML = "&lt;pre>**Github users will appear here**&lt;/pre>";
+                    }
+                </pre>
+            </p>
+            <p>Test code: <br>
+                <button id="button1">Get Users</button><br>
+                <i>//check the console to see process</i>
+                <br>
+                <h3>Users</h3>
+                <div id="users" class="result"><pre>**Github users will appear here**</pre></div>
+                <button id="reset-btn">Reset</button>
+                
+            </p>
+            
+        </div>
+    </section>
+
+    
+{% endblock %}
+{%block pageScripts %}
+    <!--script type="text/javascript" src="static/ajax1/js/main.js?v={{time}}"></script-->
+    <script type="text/javascript" src="{{ url_for('static', filename='ajax3/js/main.js', v=time) }}"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+pre {
+    max-height: 400px !important; 
+    overflow-y: scroll !important;
+}
+pre.code {
+    background: rgb(19, 19, 19) !important; 
+    color: rgb(243, 243, 243) !important;
+}
+.result {
+    background: rgb(224, 224, 224) !important; 
+    color: rgb(0, 0, 0) !important;
+}
