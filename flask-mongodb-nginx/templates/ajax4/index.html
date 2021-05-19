@@ -1,0 +1,231 @@
+{% extends 'layout.html' %}
+
+{%block pageStyle %}
+<style>
+    .user {
+        display:flex;
+        padding: 15px;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+    }
+    .user .user-info {
+        list-style: none ;
+        padding: 0px 20px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %} {{ title }} {% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h2>Get user from Mongo DB with Flask process using jax by url </h2>
+            <p> Flask Code (apy.py): 
+                <pre class="code">
+                    @app.route('/user/&lt;string:username>')
+                    def getUser(username): 
+
+                        myquery = { "name": username }
+
+                        try:
+                            doc = db.users.find_one(myquery)
+                            user = {
+                                "id":str(doc['_id']),
+                                "name": doc['name'],
+                                "lastname": doc['lastname']
+                            }
+                            return json.dumps(user)
+                        except:
+                            print("An exception occurred")
+                            return str({}) 
+                </pre>
+            </p>
+
+            <p> Js Code: 
+                <pre class="code">
+                    document.querySelector('#button1').addEventListener('click', loadLocalUers);
+
+                    function loadLocalUers(){
+                        const xhr = new XMLHttpRequest();
+                        let name = document.querySelector('#name').value;
+
+                        console.log(`request data from /user/${name}`);
+
+                        xhr.open('GET', `/user/${name}`, true);
+
+                        xhr.onprocess = () => console.log('loading...');
+
+                        xhr.onload = (event) => {
+                            const request = event.target;
+
+                            if (request.status == 200 ){
+
+                                console.log('data loaded...');
+
+                                let user = JSON.parse(request.responseText);
+
+                                if (Object.keys(user).length > 0) {
+
+                                    console.log('has data...');
+
+                                    let output = 
+                                    `
+                                    &lt;div id="user-${user.id}" class="user">
+                                        &lt;ul class="user-info">
+                                            &lt;li>Name: ${user.name}&lt;/li>
+                                            &lt;li>lastname: ${user.lastname}&lt;/li>
+                                        &lt;/ul>
+                                    &lt;/div>
+                                    `
+                                    console.log('has data...');
+
+                                    console.log('adding data to div #user');
+
+                                    document.querySelector('#user').innerHTML = output;
+
+                                } else {
+
+                                    console.log('Has no data...');
+                                    
+                                    document.querySelector('#user').innerHTML = "User not found";
+                                }
+                                
+                            } else if (request.status == 404 ){
+
+                                console.log('route not found...');
+
+                                document.querySelector('#user').innerHTML = "please type an user in the field";
+                            }
+                            //console.log(JSON.parse(request.reponseText));
+                        }
+
+                        xhr.send();
+                    }
+                </pre>
+            </p>
+            <p>Test code: <br>
+                <input type="text" id="name" class="text-field" name="id" placeholder="search user by name">
+                <button id="button1">Search</button><br>
+                <i>//check the console to see process</i>
+                <br>
+                <h3>User</h3>
+                <div id="user" class="result"><pre>**Mongo user will appear here**</pre></div>
+                
+            </p>
+            
+            <h2>Get All users from Mongo DB with Flask process using</h2>
+            <p> Flask Code (apy.py): 
+                <pre class="code">
+                    @app.route('/users')
+                    def users():
+                        
+                        try:
+                            item = {}
+                            data = []
+                            collection = db.users.find()
+                            for element in collection:
+                                item = {
+                                    'id': str(element['_id']),
+                                    'name': element['name'],
+                                    'lastname': element['lastname']
+                                }
+                                data.append(item)
+
+                            return json.dumps(data)
+                        except:
+                            print("An exception occurred")
+                            return str({}) 
+
+                </pre>
+            </p>
+
+            <p> Js Code: 
+                <pre class="code">
+                    document.querySelector('#button2').addEventListener('click', loadLocalUsers);
+
+                    function loadLocalUsers(){
+                        const xhr = new XMLHttpRequest();
+
+                        console.log(`request data from /users`);
+
+                        xhr.open('GET', `/users`, true);
+
+                        xhr.onprocess = () => console.log('loading...');
+
+                        xhr.onload = (event) => {
+
+                            const request = event.target;
+
+                            if (request.status == 200 ){
+
+                                console.log('data loaded...');
+
+                                let users = JSON.parse(request.responseText);
+
+                                if (Object.keys(users).length > 0) {
+
+                                    console.log('has data...');
+                                    console.log(users);
+                                    let output = '';
+                                    for (let user of users)
+                                    {
+                                        output += 
+                                        `
+                                        &lt;div id="user-${user.id}" class="user">
+                                            &lt;ul class="user-info">
+                                                &lt;li>Name: ${user.name}&lt;/li>
+                                                &lt;li>lastname: ${user.lastname}&lt;/li>
+                                                &lt;li>&lt;a href="/user/${user.name}">Ver usuario&lt;/a>&lt;/li>
+                                                &lt;/ul>
+                                            &lt;/div>
+                                        `
+                                    }
+                                    console.log('has data...');
+
+                                    console.log('adding data to div #users');
+
+                                    document.querySelector('#users').innerHTML = output;
+
+                                } else {
+
+                                    console.log('Has no data...');
+                                    
+                                    document.querySelector('#users').innerHTML = "User not found";
+                                }
+                                
+                            } else if (request.status == 404 ){
+
+                                console.log('route not found...');
+
+                                document.querySelector('#users').innerHTML = "please type an user in the field";
+                            }
+                            //console.log(JSON.parse(request.reponseText));
+                        }
+
+                        xhr.send();
+                    }
+                </pre>
+            </p>
+
+            <p>Test code: <br>
+                <button id="button2">Get users</button><br>
+                <i>//check the console to see process</i>
+                <br>
+                <h3>Users</h3>
+                <div id="users" class="result"><pre>**Mongo user will appear here**</pre></div>
+            </p>
+            <p><button id="reset-btn">Reset</button></p>
+
+        </div>
+    </section>
+
+    
+{% endblock %}
+{%block pageScripts %}
+    <!--script type="text/javascript" src="static/ajax1/js/main.js?v={{time}}"></script-->
+    <script type="text/javascript" src="{{ url_for('static', filename='ajax4/js/main.js', v=time) }}"></script>
+{% endblock %}

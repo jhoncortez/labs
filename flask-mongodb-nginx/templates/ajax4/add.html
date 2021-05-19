@@ -1,0 +1,175 @@
+{% extends 'layout.html' %}
+
+{%block pageStyle %}
+<style>
+    .result {
+        padding:10px;
+    }
+    .div-success {
+        background:green !important;
+        color: #fff !important;
+    }
+    .div-error {
+        background:red !important;
+        color: #000;
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %} {{ title }} {% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container">
+            
+            <h2>Add user to Mongo DB with Flask process Without using Ajax</h2>
+            <p> Flask Code (apy.py): 
+                <pre class="code">
+                    @app.route('/addUser', methods=['POST', 'GET'])
+                    def addUser():
+
+                        if request.method == 'POST':
+                            name = request.form.get('name')
+                            lastname = request.form.get('lastname')
+
+                        elif request.method == 'GET':
+                            name = request.args.get('name')
+                            lastname = request.args.get('lastname')
+
+                        user = {
+                                'name': name,
+                                'lastname': lastname
+                            }
+
+                        try:
+                            db.users.insert_one(user)
+                            return jsonify(
+                                response = {'text':f'user {name} {lastname} Saved!','status': 200, 'error': 0}
+                                )
+                        except:
+                            print("An exception occurred")
+                            return jsonify(
+                                response = {'text':"An exception occurred",'status': 403, 'error': 1}
+                                )
+
+                </pre>
+            </p>
+
+            <p>Test code: <br>
+                <form action="{{ url_for('addUser') }}" method="post" >
+                    <input type="text" id="name" class="text-field" name="name" placeholder="Name">
+                    <input type="text" id="lastname" class="text-field" name="lastname" placeholder="Last name" >
+                    <input type="submit" value="Submit">
+                </form>
+            </p>
+
+            <h2>Add user to Mongo DB with Flask process using Ajax</h2>
+            <p> Flask Code (apy.py): 
+                <pre class="code">
+                    @app.route('/addUser', methods=['POST', 'GET'])
+                    def addUser():
+
+                        if request.method == 'POST':
+                            name = request.form.get('name')
+                            lastname = request.form.get('lastname')
+
+                        elif request.method == 'GET':
+                            name = request.args.get('name')
+                            lastname = request.args.get('lastname')
+
+                        user = {
+                                'name': name,
+                                'lastname': lastname
+                            }
+
+                        try:
+                            db.users.insert_one(user)
+                            return jsonify(
+                                response = {'text':f'user {name} {lastname} Saved!','status': 200, 'error': 0}
+                                )
+                        except:
+                            print("An exception occurred")
+                            return jsonify(
+                                response = {'text':"An exception occurred",'status': 403, 'error': 1}
+                                )
+
+                </pre>
+            </p>
+
+            <p> Js Code: 
+                <pre class="code">
+                    document.querySelector('#AJAX-add-form').addEventListener('submit', addSubmit);
+
+                    function addSubmit(ev) {
+                        ev.preventDefault();
+
+                        const xhr = new XMLHttpRequest();
+
+                        xhr.addEventListener('load', addUserResponse);
+
+                        xhr.open('POST','/addUser', true);
+
+                        xhr.onprogress = ()  => console.log('lodading...');
+
+                        xhr.send(new FormData(this));
+
+                    }
+
+                    function addUserResponse() {
+
+                        console.log(this.responseText);
+
+                        let data = JSON.parse(this.responseText);
+
+                        let resultDiv = document.querySelector('#result');
+
+                        if (this.status == 200){
+
+                            if (data.response.error == 1 ) {
+                                resultDiv.classList.remove("div-success");
+                                resultDiv.classList.add("div-error");
+                            }
+                            else {
+                                resultDiv.classList.remove("div-error");
+                                resultDiv.classList.add("div-success");
+                            }
+
+                            resultDiv.innerText = data.response.text;
+                        }
+                        else if (this.status == 404) {
+                            resultDiv.innerHTML = "Error: url not found";
+                        }
+                        
+                        
+                    }
+
+                </pre>
+            </p>
+
+            <p>Test code: <br>
+                <form id="AJAX-add-form" action="{{ url_for('addUser')|tojson|safe }}" method="post" >
+                    <input type="text" id="name" class="text-field" name="name" placeholder="Name">
+                    <input type="text" id="lastname" class="text-field" name="lastname" placeholder="Last name" >
+                    <input type="submit" value="Submit">
+                </form>
+                <i>//check the console to see process</i>
+                <br>
+                <h3>User</h3>
+                <div id="result" class="result"><pre>**Mongo user will appear here**</pre></div>
+                
+            </p>
+
+            <p><button id="reset-btn">Reset</button></p>
+
+        </div>
+    </section>
+
+    
+{% endblock %}
+{%block pageScripts %}
+    <!--script type="text/javascript" src="static/ajax1/js/main.js?v={{time}}"></script-->
+    <script type="text/javascript" src="{{ url_for('static', filename='ajax4/js/add.js', v=time) }}"></script>
+{% endblock %}

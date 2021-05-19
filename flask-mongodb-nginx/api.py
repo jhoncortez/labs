@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, request, render_template
-from pymongo import MongoClient
+from flask import Flask, jsonify, request, render_template, json
+#from pymongo import MongoClient
+import pymongo
 from datetime import datetime
+
 
 app = Flask(__name__)
 now = datetime.now() # current date and time
@@ -9,7 +11,7 @@ now = datetime.now() # current date and time
 # app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2592000 # 30 days
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-client = MongoClient('mongodb://mongodb:27017/')
+client = pymongo.MongoClient('mongodb://mongodb:27017/')
 db = client.test_database
 
 @app.route('/')
@@ -18,33 +20,100 @@ def hello_world():
 
 @app.route('/users')
 def users():
-    collection = db.users.find()
+    
+    try:
+        item = {}
+        data = []
+        collection = db.users.find()
+        for element in collection:
+            item = {
+                'id': str(element['_id']),
+                'name': element['name'],
+                'lastname': element['lastname']
+            }
+            data.append(item)
 
-    item = {}
-    data = []
-    for element in collection:
-        item = {
-            'id': str(element['_id']),
-            'name': element['name'],
-            'lastname': element['lastname']
+        return jsonify(
+            data=data
+        )
+    except:
+        print("An exception occurred")
+        return str({}) 
+    
+
+@app.route('/user/<string:username>')
+def getUser(username): 
+
+    myquery = { "name": username }
+
+    try:
+        doc = db.users.find_one(myquery)
+        user = {
+            "id":str(doc['_id']),
+            "name": doc['name'],
+            "lastname": doc['lastname']
         }
-        data.append(item)
+        return json.dumps(user)
+    except:
+        print("An exception occurred")
+        return str({}) 
+    
 
-    return jsonify(
-        data=data
-    )
+    
 
-@app.route('/user')
-def user():
+@app.route('/search', methods=['POST', 'GET'])
+def search(): 
     name = request.args.get('name')
-    lastname = request.args.get('lastname')
-    user = {
-        'name': name,
-        'lastname': lastname
-    }
-    db.users.insert_one(user)
+    myquery = { "name": name }
 
-    return 'Saved!', 201
+    try:
+        doc = db.users.find(myquery)
+
+        items = {}
+        data = []
+        for x in doc:
+            items = {
+                "id":str(x['_id']),
+                "name": x['name'],
+                "lastname": x['lastname']
+            }
+            data.append(items)
+
+        return jsonify(
+            data=data
+        )
+        
+    except:
+        print("An exception occurred")
+        return str({}) 
+
+@app.route('/addUser', methods=['POST', 'GET'])
+def addUser():
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        lastname = request.form.get('lastname')
+
+    elif request.method == 'GET':
+        name = request.args.get('name')
+        lastname = request.args.get('lastname')
+
+    user = {
+            'name': name,
+            'lastname': lastname
+        }
+
+    try:
+        db.users.insert_one(user)
+        return jsonify(
+            response = {'text':f'user {name} {lastname} Saved!','status': 200, 'error': 0}
+            )
+    except:
+        print("An exception occurred")
+        return jsonify(
+            response = {'text':"An exception occurred",'status': 403, 'error': 1}
+            )
+
 
 @app.route('/ajax1')
 def ajax1():
@@ -57,3 +126,11 @@ def ajax2():
 @app.route('/ajax3')
 def ajax3():
     return render_template('/ajax3/index.html', title = 'Ajax 3 - External Api',time = now.strftime("%m%d%Y%f"))
+
+@app.route('/ajax4')
+def ajax4():
+    return render_template('/ajax4/index.html', title = 'Ajax 4 - Ajax & Flask Forms',time = now.strftime("%m%d%Y%f"))
+
+@app.route('/addForm')
+def addForm():
+    return render_template('/ajax4/add.html', title = 'Ajax 4 - Add user form',time = now.strftime("%m%d%Y%f"))
