@@ -1,0 +1,155 @@
+/*** standard - basics  ***/
+/* import reset.scss */
+html,
+body,
+ul,
+ol {
+  margin: 0;
+  padding: 0; }
+
+/* define variables */
+.list-jobs, .list-item .col-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; }
+
+.list-item .col-tags {
+  justify-content: space-between; }
+
+.heading-basic, .list-item .col-details .position, .list-item .col-details .company, .list-item .tag {
+  font-weight: 700; }
+
+.list-item {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px; }
+
+.list-item .col-tags .tag {
+  text-align: center; }
+
+/* use variables and import important properties to body */
+body {
+  font-family: "Spartan", sans-serif;
+  font-size: 1em;
+  /* include colorAndSize with parameters color and fontsize */
+  color: #7b8e8e;
+  font-size: 1em;
+  font-weight: 500;
+  background-color: #effafa; }
+
+.container {
+  max-width: 375px;
+  margin: auto auto; }
+  @media only screen and (min-width: 375px) {
+    .container {
+      max-width: 1440px; } }
+
+/* classes for @extends and Inheritance proporse */
+.parragraph-basics, body span, body p {
+  margin-bottom: 10px;
+  margin-top: 10px; }
+
+.heading-basic, .list-item .col-details .position {
+  line-height: 1.5;
+  color: #2c3a3a; }
+
+.links-basic, .list-item .tag {
+  text-decoration: none;
+  cursor: pointer; }
+  .links-basic, .list-item .tag, .links-basic .text-link, .list-item .tag .text-link {
+    color: #5ba4a4; }
+  .links-basic:hover, .list-item .tag:hover {
+    text-decoration: underline; }
+
+/*** header ***/
+.header {
+  background-image: url("images/bg-header-mobile.svg");
+  background-position: center;
+  background-size: cover;
+  height: 15vh;
+  width: 100%;
+  margin-bottom: 80px; }
+  @media only screen and (min-width: 375px) {
+    .header {
+      background-image: url("images/bg-header-desktop.svg"); } }
+
+/*** items ***/
+.list-jobs {
+  flex-direction: column;
+  justify-content: flex-start; }
+
+.list-item {
+  background: #fff;
+  background: linear-gradient(90deg, #5ba4a4 2%, #fff 2%);
+  margin-bottom: 60px;
+  padding: 10px 30px;
+  border-radius: 10px;
+  width: 85%; }
+  @media only screen and (min-width: 769px) {
+    .list-item {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: flex-start;
+      width: 100%;
+      flex: 0 1 auto; } }
+  @media only screen and (min-width: 769px) {
+    .list-item .col {
+      align-content: center; } }
+  .list-item .profile-img {
+    margin-top: -50px; }
+    @media only screen and (min-width: 769px) {
+      .list-item .profile-img {
+        margin-top: 0px;
+        margin-left: 20px; } }
+  .list-item .col-details .position {
+    font-size: 1.5em; }
+  .list-item .col-details .company {
+    color: #5ba4a4;
+    margin-right: 5px; }
+  .list-item .col-details .detail-item.principal-tags {
+    padding: 10px 0px; }
+    .list-item .col-details .detail-item.principal-tags .tag {
+      font-size: 0.5em;
+      padding: 10px 10px;
+      margin-left: 5px;
+      margin-right: 5px;
+      text-transform: uppercase;
+      color: #fff;
+      border-radius: 15px; }
+      .list-item .col-details .detail-item.principal-tags .tag-new {
+        background-color: #5ba4a4; }
+      .list-item .col-details .detail-item.principal-tags .tag-featured {
+        background-color: #2c3a3a; }
+  .list-item .col-details .detail-item.position-detail {
+    padding: 10px 0px; }
+  .list-item .col-details .detail-item.detail-metas {
+    padding: 10px 0px 20px; }
+  @media only screen and (min-width: 769px) {
+    .list-item .col-details {
+      padding-left: 10px;
+      padding-right: 10px; } }
+  .list-item .col-tags {
+    border-top: solid 1px #7b8e8e;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    flex-direction: row;
+    justify-content: flex-start; }
+    .list-item .col-tags .tag {
+      padding: 15px 15px;
+      margin: 0 10px 10px;
+      background-color: #effafa; }
+      .list-item .col-tags .tag-role {
+        margin-left: 0px; }
+    @media only screen and (min-width: 769px) {
+      .list-item .col-tags {
+        padding-left: 10px;
+        padding-right: 10px;
+        border-top: none;
+        flex-direction: row;
+        justify-content: flex-end;
+        flex-grow: 1; } }
+  @media only screen and (min-width: 375px) {
+    .list-item .tag {
+      font-size: 1em !important; } }
+
+/*# sourceMappingURL=style.css.map */

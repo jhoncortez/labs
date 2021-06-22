@@ -1,0 +1,113 @@
+
+.list-jobs{
+    @extend %flex;
+    @include flexColumn;
+}
+
+.list-item {
+    background: $listItemsBg;
+    @include bg-gradient($primaryColor, $listItemsBg);
+    margin-bottom: 60px;
+    padding: 10px 30px;
+    @include border-rounded(10px) ;
+    width:85%;
+    @include mq(769px) {
+        @include flex;
+        @include flexRow;
+        width:100%;
+        @include flex-auto;
+    } 
+
+    .col{
+        @include mq(769px) {
+            //@include flexCenter;
+            
+            align-content: center;
+        }
+    }
+    .profile-img{
+        margin-top: -50px;
+        @include mq(769px) {
+            margin-top: 0px;
+            margin-left: 20px;
+        }
+    }
+
+    @extend %shadow-bottom;
+    .col-details{
+        .position {
+            font-size: 1.5em;
+            @extend .heading-basic;
+        }
+        
+        .company {
+            @extend %bold;
+            color: $primaryColor;
+            margin-right:5px;
+        }
+        .detail-item {
+    
+            &.principal-tags{
+                padding: 10px 0px;
+                .tag {
+                    font-size: $fontSizeMobile;
+                    padding:10px 10px;
+                    margin-left:5px;
+                    margin-right:5px;
+                    text-transform: uppercase;
+                    color:#fff;
+                    @include border-rounded(15px) ;
+                    &-new {
+                        background-color: $primaryColor;
+                    }
+                    &-featured {
+                        background-color: $VeryDarkGrayishCyan;
+                    }
+                }
+            }
+            &.position-detail {
+                padding: 10px 0px;
+            }
+            &.detail-metas{
+                padding: 10px 0px 20px;
+            }
+        }
+        @include mq(769px) {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+    }
+    .col-tags {
+        border-top: solid 1px $DarkGrayishCyan;
+        padding-top:20px;
+        padding-bottom: 20px;
+        @extend %flex;
+        @include flexRow;
+        @extend %justify-between;
+        .tag {
+            padding:15px 15px;
+            margin: 0 10px 10px;
+            //@extend %flex1;
+            @extend %align-center;
+            background-color:$bgBody;
+            &-role{
+                margin-left:0px;
+            }
+        }
+        @include mq(769px) {
+            padding-left: 10px;
+            padding-right: 10px;
+            border-top: none;
+            @include flexRowEnd;
+            flex-grow: 1;
+        }
+    }
+    .tag {
+        @extend .links-basic;
+        @extend %bold;
+        @include mq(375px) {
+            font-size: $fontSize !important;
+        }
+    }
+}

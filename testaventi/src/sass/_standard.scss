@@ -1,0 +1,137 @@
+/* import reset.scss */
+@import "reset";
+
+/* define variables */
+$font: 'Spartan', sans-serif;
+
+$fontSize : 1em;
+$fontSizeMobile : 0.5em;
+$widthContainerDesktop : 1440px;
+$widthContainerMobile : 375px;
+$marginAuto: auto auto;
+$bgBody : hsl(180, 52%, 96%);
+$listItemsBg : #fff;
+$DarkGrayishCyan : hsl(180, 8%, 52%);
+$VeryDarkGrayishCyan : hsl(180, 14%, 20%);
+$primaryColor : hsl(180, 29%, 50%);
+
+// new variables to import and use in style.scss and standard.scss
+$menuFontSize: 20px;
+
+@mixin flex {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+@mixin flex-auto {
+    flex: 0 1 auto;
+}
+%flex {
+    @include  flex; 
+}
+%flex1 {
+    flex: 1 1 0%;
+}
+%flex-auto {
+    @include  flex-auto; 
+}
+%justify-between {
+    justify-content: space-between;
+}
+%bold {
+    font-weight: 700;
+}
+
+%shadow-bottom{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+@mixin bg-gradient($color1, $color2) {
+    background: linear-gradient(90deg, $color1 2%, $color2 2%);
+}
+@mixin border-rounded($size) {
+    border-radius: $size;
+}
+
+%align-center {
+    text-align:center;
+}
+@mixin flexColumn {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+@mixin flexRow {
+    flex-direction: row;
+    justify-content: flex-start;
+}
+@mixin flexRowEnd {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+@mixin flexCenter {
+    justify-content: center;
+}
+
+@mixin mq($size) {
+    @media only screen and (min-width: $size) {
+        @content;
+    }
+}
+
+
+// function mixin important-body-properties
+@mixin important-body-properties {
+    font-family: $font;
+    font-size: $fontSize;
+}
+
+// function mixin colorAndSize
+@mixin colorAndSize($c, $s) {
+    color: $c;
+    font-size: $s;
+    font-weight: 500;
+}
+
+/* use variables and import important properties to body */
+body {
+    @include important-body-properties;
+    /* include colorAndSize with parameters color and fontsize */
+    @include colorAndSize($DarkGrayishCyan , $fontSize);
+    background-color: $bgBody;
+
+    span, p {
+        @extend .parragraph-basics;
+    }
+}
+
+.container {
+    max-width: $widthContainerMobile;
+    margin: $marginAuto;
+    @include mq(375px) 
+    {
+        max-width: $widthContainerDesktop;
+    }
+}
+
+/* classes for @extends and Inheritance proporse */
+.parragraph-basics{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.heading-basic {
+    @extend %bold;
+    line-height: 1.5;
+    color:$VeryDarkGrayishCyan;
+}
+.links-basic {
+    & , .text-link {
+        color: $primaryColor;
+    }
+    text-decoration: none;
+    cursor:pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+
+}
+
+
